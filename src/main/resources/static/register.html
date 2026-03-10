@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Register - My Store</title>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+	<style>
+		body {
+			margin: 0;
+			font-family: Segoe UI, Arial, sans-serif;
+			background: linear-gradient(135deg, #141e30, #243b55);
+			height: 100vh;
+		}
+
+		/* NAVBAR */
+
+		nav {
+			background: #111;
+			color: white;
+			padding: 15px 40px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		nav h2 {
+			margin: 0;
+			color: white;
+		}
+
+		nav a {
+			color: white;
+			text-decoration: none;
+			margin-left: 20px;
+			font-weight: 500;
+		}
+
+		nav a:hover {
+			color: #ff6a00;
+		}
+
+		/* REGISTER SECTION */
+
+		.register-wrapper {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 85vh;
+		}
+
+		/* GLASS CARD */
+
+		.register-card {
+			width: 380px;
+			padding: 40px;
+			border-radius: 12px;
+			background: rgba(255, 255, 255, 0.08);
+			backdrop-filter: blur(10px);
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+			color: white;
+		}
+
+		/* TITLE */
+
+		.register-card h2 {
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		/* INPUT */
+
+		.input-group {
+			margin-bottom: 20px;
+			position: relative;
+		}
+
+		.input-group input {
+			width: 100%;
+			padding: 12px;
+			border: none;
+			border-radius: 6px;
+			outline: none;
+			background: rgba(255, 255, 255, 0.15);
+			color: white;
+			font-size: 14px;
+		}
+
+		.input-group input::placeholder {
+			color: #ddd;
+		}
+
+		/* PASSWORD ICON */
+
+		.eye {
+			position: absolute;
+			right: 10px;
+			top: 12px;
+			cursor: pointer;
+			color: #ddd;
+		}
+
+		/* BUTTON */
+
+		button {
+			width: 100%;
+			padding: 12px;
+			border: none;
+			border-radius: 6px;
+			background: #ff6a00;
+			color: white;
+			font-size: 16px;
+			cursor: pointer;
+			transition: .3s;
+		}
+
+		button:hover {
+			background: #ff4500;
+		}
+
+		/* MESSAGE */
+
+		#message {
+			margin-top: 15px;
+			text-align: center;
+			font-size: 14px;
+		}
+
+		/* LOGIN LINK */
+
+		.login-link {
+			text-align: center;
+			margin-top: 20px;
+			font-size: 14px;
+		}
+
+		.login-link a {
+			color: #ff6a00;
+			text-decoration: none;
+			font-weight: bold;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<nav>
+
+		<h2>My Store</h2>
+
+		<div>
+			<a href="/index.html">Home</a>
+			<a href="/login.html">Login</a>
+			<a href="/cart.html">Cart</a>
+		</div>
+
+	</nav>
+
+	<div class="register-wrapper">
+
+		<div class="register-card">
+
+			<h2>Create Account</h2>
+
+			<div class="input-group">
+				<input id="name" type="text" placeholder="Enter Name">
+			</div>
+
+			<div class="input-group">
+				<input id="email" type="email" placeholder="Enter Email">
+			</div>
+
+			<div class="input-group">
+				<input id="password" type="password" placeholder="Enter Password">
+				<span class="eye" onclick="togglePassword()">
+					<i class="fa-solid fa-eye"></i>
+				</span>
+			</div>
+
+			<button onclick="register()">Register</button>
+
+			<p id="message"></p>
+
+			<div class="login-link">
+				Already have an account? <a href="/login.html">Login</a>
+			</div>
+
+		</div>
+
+	</div>
+
+	<script>
+
+		const API = "http://localhost:8080";
+
+		/* PASSWORD SHOW */
+
+		function togglePassword() {
+
+			let pass = document.getElementById("password");
+
+			if (pass.type === "password") {
+				pass.type = "text";
+			} else {
+				pass.type = "password";
+			}
+
+		}
+
+		/* REGISTER FUNCTION */
+
+		function register() {
+
+			const name = document.getElementById("name").value.trim();
+			const email = document.getElementById("email").value.trim();
+			const password = document.getElementById("password").value.trim();
+
+			const message = document.getElementById("message");
+
+			message.innerText = "";
+			message.style.color = "red";
+
+			if (!name || !email || !password) {
+				message.innerText = "All fields are required!";
+				return;
+			}
+
+			fetch(API + "/api/auth/register", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					name: name,
+					email: email,
+					password: password
+				})
+			})
+
+				.then(async res => {
+
+					let data = null;
+
+					try {
+						data = await res.json();
+					} catch (e) { }
+
+					if (res.ok) {
+						return data;
+					}
+
+					if (data && data.message && data.message.toLowerCase().includes("exist")) {
+						throw new Error("User already exists. Please login.");
+					}
+
+					throw new Error("Registration failed. Try again.");
+
+				})
+
+				.then(() => {
+
+					message.style.color = "lightgreen";
+					message.innerText = "Registration successful! Redirecting...";
+
+					setTimeout(() => {
+						window.location.href = "/login.html";
+					}, 1200);
+
+				})
+
+				.catch(err => {
+
+					message.style.color = "red";
+					message.innerText = err.message;
+
+				});
+
+		}
+
+	</script>
+
+</body>
+
+</html>

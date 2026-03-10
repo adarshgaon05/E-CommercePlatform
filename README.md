@@ -1,63 +1,52 @@
-# E-Commerce Web Application
+#  E-Commerce Platform – Secure Backend System
 
-A full-stack **online shopping platform** that allows users to browse products, add items to cart, and place orders. The application manages product inventory and user carts while demonstrating core backend development concepts using **Spring Boot and PostgreSQL**.
+##  Project Overview
+E-Commerce Platform is a secure backend application built using Spring Boot.  
+It provides RESTful APIs for user authentication, product management, cart operations, and order processing.
 
-## Features
+---
 
-* Product listing and catalog management
-* Add to cart functionality
-* Order placement and management
-* Inventory/stock management
-* Backend REST APIs using Spring Boot
-* Database integration with PostgreSQL
-* Simple responsive UI using HTML and CSS
+##  Tech Stack
+- Java 17
+- Spring Boot
+- Spring Security
+- JWT Authentication
+- Spring Data JPA
+- PostgreSQL
+- Maven
 
-## Tech Stack
+---
 
-**Backend:** Java, Spring Boot, Spring Data JPA, REST APIs
-**Database:** PostgreSQL
-**Frontend:** HTML, CSS, JavaScript
-**Tools:** Eclipse, Postman, Git, GitHub, Maven
+##  Features
+- User Registration & Login (JWT Authentication)
+- Role-Based Access Control (ADMIN / USER)
+- Product Management APIs
+- Add to Cart & Remove from Cart
+- Order Placement
+- Global Exception Handling
+- Layered Architecture (Controller → Service → Repository)
 
-## API Overview
+---
 
-* **GET** /api/products — Fetch all products
-* **GET** /api/products/{id} — Fetch product by ID
-* **POST** /api/cart/add — Add product to cart
-* **GET** /api/cart — View cart items
-* **POST** /api/order — Place order
+##  Database
+PostgreSQL relational database with JPA entity relationships.
 
-## Project Architecture
+---
 
-```
-/ecommerce-project
- ├── src
- │   ├── main
- │   │   ├── java
- │   │   │    └── com.ecommerce
- │   │   │         ├── controller
- │   │   │         ├── service
- │   │   │         ├── repository
- │   │   │         └── model
- │   │   ├── resources
- │   │        └── application.properties
- ├── pom.xml
-```
+##  API Testing
+Tested using Postman.
 
-## Running the Project
+---
 
-**Backend:**
+##  Architecture
+The project follows clean layered architecture:
+- Controller Layer
+- Service Layer
+- Repository Layer
+- DTO Pattern
+- Global Exception Handling
 
-```
-mvn spring-boot:run
-```
+---
 
-Then open browser:
-
-```
-http://localhost:8080
-```
-
-## Author
-
+##  Developed By
 Adarsh Gaon
